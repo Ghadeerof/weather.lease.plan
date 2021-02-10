@@ -1,15 +1,19 @@
 package com.weather.leaseplan.service;
 
+import com.weather.leaseplan.dto.request.QueryWeatherRequestDto;
 import com.weather.leaseplan.dto.request.WeatherRequestDto;
 import com.weather.leaseplan.dto.response.FullWeatherResponseDto;
 import com.weather.leaseplan.dto.response.WeatherResponseDto;
 import com.weather.leaseplan.entity.Weather;
 import com.weather.leaseplan.extension.WeatherExtension;
+import com.weather.leaseplan.model.Constants;
 import com.weather.leaseplan.repository.WeatherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +24,9 @@ public class WeatherService {
 
     @Autowired
     WeatherRepository weatherRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public ResponseEntity<WeatherResponseDto> getWeather(UUID id){
 
@@ -52,7 +59,7 @@ public class WeatherService {
         }
     }
 
-    public ResponseEntity<WeatherResponseDto> addWeather(FullWeatherResponseDto dto){
+    public ResponseEntity<WeatherResponseDto> addWeather(WeatherRequestDto dto){
         try {
             Weather Weather = WeatherExtension.toWeatherEntity(dto);
             Weather addedWeather = weatherRepository.save(Weather);
@@ -65,26 +72,19 @@ public class WeatherService {
         }
     }
 
-    public ResponseEntity<WeatherResponseDto> updateWeather(UUID id, FullWeatherResponseDto dto){
+    public WeatherRequestDto getRestApiWeather(QueryWeatherRequestDto dto){
+        String city = dto.getCity();
+        String url = Constants.WEATHER_API_URL.replace("{city}", city).replace("{appid}", Constants.APP_ID);
 
-        try {
-            Weather weather = weatherRepository.get(id);
+        try{
+            ResponseEntity<FullWeatherResponseDto> response = restTemplate.getForEntity(url, FullWeatherResponseDto.class);
 
-            if(weather == null){
-                return new ResponseEntity<>(null,HttpStatus.FAILED_DEPENDENCY);
-            }
+            WeatherRequestDto requestDto = WeatherExtension.toWeatherRequestDto(response.getBody());
 
-            weather.setCity(dto.getName());
-            weather.setCountry(dto.getSys().getCountry());
-            weather.setTemperature(dto.getMain().getTemp());
+            return requestDto;
 
-            Weather addedWeather = weatherRepository.save(weather);
-
-            WeatherResponseDto responseDto = WeatherExtension.toWeatherDto(addedWeather);
-
-            return new ResponseEntity<>(responseDto,HttpStatus.ACCEPTED);
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.FAILED_DEPENDENCY);
+        }catch (RestClientException ex){
+            return null;
         }
     }
 
