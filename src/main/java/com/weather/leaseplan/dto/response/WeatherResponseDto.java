@@ -1,155 +1,62 @@
 package com.weather.leaseplan.dto.response;
 
-import com.weather.leaseplan.dto.partial.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 public class WeatherResponseDto {
 
     //region Properties
-    private CoordDto coord;
+    private UUID id;
 
-    private List<WeatherDto> weather;
+    private String city;
 
-    private String base;
+    private String country;
 
-    private MainDto main;
-
-    private Integer visibility;
-
-    private WindDto wind;
-
-    private CloudsDto clouds;
-
-    private Integer dt;
-
-    private SysDto sys;
-
-    private Integer id;
-
-    private String name;
-
-    private Integer cod;
+    private Double temperature;
     //endregion
 
-    //region Constructors
+    //region Constructor
     public WeatherResponseDto() {
-        weather = new ArrayList<>();
     }
 
-    public WeatherResponseDto(CoordDto coord, List<WeatherDto> weather, String base, MainDto main, Integer visibility,
-                              WindDto wind, CloudsDto clouds, Integer dt, SysDto sys, Integer id, String name, Integer cod) {
-        this.coord = coord;
-        this.weather = weather;
-        this.base = base;
-        this.main = main;
-        this.visibility = visibility;
-        this.wind = wind;
-        this.clouds = clouds;
-        this.dt = dt;
-        this.sys = sys;
+    public WeatherResponseDto(UUID id, String city, String country, Double temperature) {
         this.id = id;
-        this.name = name;
-        this.cod = cod;
+        this.city = city;
+        this.country = country;
+        this.temperature = temperature;
     }
     //endregion
 
     //region Getters & Setters methods
-    public CoordDto getCoord() {
-        return coord;
-    }
-
-    public void setCoord(CoordDto coord) {
-        this.coord = coord;
-    }
-
-    public List<WeatherDto> getWeather() {
-        return weather;
-    }
-
-    public void setWeather(List<WeatherDto> weather) {
-        this.weather = weather;
-    }
-
-    public String getBase() {
-        return base;
-    }
-
-    public void setBase(String base) {
-        this.base = base;
-    }
-
-    public MainDto getMain() {
-        return main;
-    }
-
-    public void setMain(MainDto main) {
-        this.main = main;
-    }
-
-    public Integer getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(Integer visibility) {
-        this.visibility = visibility;
-    }
-
-    public WindDto getWind() {
-        return wind;
-    }
-
-    public void setWind(WindDto wind) {
-        this.wind = wind;
-    }
-
-    public CloudsDto getClouds() {
-        return clouds;
-    }
-
-    public void setClouds(CloudsDto clouds) {
-        this.clouds = clouds;
-    }
-
-    public Integer getDt() {
-        return dt;
-    }
-
-    public void setDt(Integer dt) {
-        this.dt = dt;
-    }
-
-    public SysDto getSys() {
-        return sys;
-    }
-
-    public void setSys(SysDto sys) {
-        this.sys = sys;
-    }
-
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCity() {
+        return city;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public Integer getCod() {
-        return cod;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCod(Integer cod) {
-        this.cod = cod;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
     }
     //endregion
 }
